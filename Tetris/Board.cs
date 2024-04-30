@@ -89,6 +89,7 @@ public static class Board
 
             if (count == GameBoard[i].Length)
             {
+                Game.Count++;
                 for (int j = i; j > 0; j--)
                 {
                     for (int k = 0; k < GameBoard[j].Length; k++)

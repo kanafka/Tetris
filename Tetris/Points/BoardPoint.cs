@@ -10,6 +10,6 @@ public class BoardPoint
     }
     public override string ToString()
     {
-        return IsBrick ? "[#]":"[ ]";
+        return IsBrick ? " ☻ ":" ☺ ";
     }
 }

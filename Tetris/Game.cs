@@ -5,6 +5,7 @@ namespace Tetris;
 
 public class Game
 {
+    public static int Count = 0;
     private static Point TetrominoCoords = new Point(3, 0);
 
     private static Tetromino[] AllTetromino =
@@ -13,6 +14,7 @@ public class Game
     private static bool GameContinue = Board.GetMaxY() > 0;
     private static int speed = 200;
     private static Tetromino figure = RandomFigure();
+    private static int FPS = 60;
 
     private static void ShowBoard(Tetromino figure)
     {
@@ -31,6 +33,10 @@ public class Game
                 Console.Write(board[i][j].ToString());
             }
 
+            if (i == 0)
+            {
+                Console.Write($"  {Count}");
+            }
             Console.WriteLine();
         }
     }
@@ -57,6 +63,15 @@ public class Game
         return AllTetromino[randomIndex];
     }
 
+    static void UpdateScreen()
+    {
+        while (GameContinue)
+        {
+            ShowBoard(figure);
+            Thread.Sleep(1000/FPS);
+        }
+        
+    }
     static void Down()
     {
         while (GameContinue)
@@ -64,9 +79,9 @@ public class Game
             figure = RandomFigure();
             TetrominoCondition.ZeroCondition();
             while (Board.CheckForFreeCoords(figure.ShowFigure(TetrominoCondition.GetCondition(), TetrominoCoords)))
-            {
-                TetrominoCoords.Y++;
-                ShowBoard(figure);
+            { 
+                 TetrominoCoords.Y++;
+                // ShowBoard(figure);
                 Thread.Sleep(speed);
             }
             //Thread.Sleep(200);
@@ -79,7 +94,9 @@ public class Game
     public static void StartGame()
     {
         Thread inputThread = new Thread(Down);
+        Thread updSrc = new Thread(UpdateScreen);
         inputThread.Start();
+        updSrc.Start();
         Board.InitializationBoard();
         while (GameContinue)
         {
@@ -93,7 +110,7 @@ public class Game
                     if (Board.CheckLeftCoords(figure.ShowFigure(TetrominoCondition.GetCondition(), TetrominoCoords)))
                     {
                         TetrominoCoords.X--;
-                        ShowBoard(figure);
+                        // ShowBoard(figure);
                     }
                 }
                 else if (key.Key == ConsoleKey.RightArrow)
@@ -101,7 +118,7 @@ public class Game
                     if (Board.CheckRightCoords(figure.ShowFigure(TetrominoCondition.GetCondition(), TetrominoCoords)))
                     {
                         TetrominoCoords.X++;
-                        ShowBoard(figure);
+                        // ShowBoard(figure);
                     }
                 }
 
@@ -111,13 +128,13 @@ public class Game
                             TetrominoCoords)))
                     {
                         TetrominoCondition.NextCondition();
-                        ShowBoard(figure);
+                        // ShowBoard(figure);
                     }
                 }
                 else if (key.Key == ConsoleKey.DownArrow)
                 {
                     TetrominoCoords.Y++;
-                    ShowBoard(figure);
+                    // ShowBoard(figure);
                 }
                 else if (key.Key == ConsoleKey.Spacebar)
                 {
@@ -125,7 +142,7 @@ public class Game
                     {
                         TetrominoCoords.Y++;
                     }
-                    ShowBoard(figure);
+                    // ShowBoard(figure);
                     break;
                 }
             }
